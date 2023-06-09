@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "oldies-backend"
+version = "0.1.0"
+description = ""
+authors = ["ratchaphon1412 <ratchaphon.h111@gmail.com>"]
+readme = "README.md"
+packages = [{include = "oldies_backend"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django-environ = "^0.10.0"
+
+
+[tool.poetry.group.dev.dependencies]
+django = "^4.2.2"
+djangorestframework = "^3.14.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
