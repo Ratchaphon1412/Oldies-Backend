@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import UserProfiles
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from .exceptions import EmailNotVerified
 
 class UserProfilesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -27,7 +28,11 @@ class UserProfilesSerializer(serializers.ModelSerializer):
 class OldiesTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls,user):
-        token = super().get_token(user)
-        # Add custom claims
-        token['email'] = user.email
+        if user.is_email_verified:
+            token = super().get_token(user)
+            # Add custom claims
+            token['email'] = user.email
+        else:
+            raise EmailNotVerified
+        
         return token
