@@ -1,48 +1,41 @@
-from django.shortcuts import render
-from django.conf import settings
+#REST FRAMEWORK
 from rest_framework.views import APIView,Response
-from Users import exceptions,models,serializers
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.tokens import RefreshToken
+
+#Utils
 from django.utils.http import urlsafe_base64_decode
-from .utils import EmailVerify
+from .utils import *
+
+
+#Models
+from Users import exceptions,models,serializers
 
 # Create your views here.
 
 class Register(APIView):
     def post (self,request):
-        try:
-            check_user = models.UserProfiles.objects.filter(email=request.data['email'])
-            if check_user.count() > 0:
-                raise exceptions.NotAcceptableCreateAccount
-            
-            serializer = serializers.UserProfilesSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
+        serializer = serializers.UserProfilesSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
             EmailVerify.send_email_token(serializer.data['email'],serializer.instance)
-            
-            
             return Response(status=201,data={'status':'success',
-                                             'messege':'Account Created',
+                                            'messege':'Account Created',
                                             'username':serializer.data['username'],
             })
-        except exceptions.NotAcceptableCreateAccount as e:
-            raise e
-        except exceptions.EmailErrorSend:
-            raise exceptions.EmailErrorSend
-        except:
+        else:
             raise exceptions.BadRequestBody
+   
 
 class AuthenticationJWT(APIView):
     
     def get(self,request):
         user,token = JWTAuthentication().authenticate(request)
         if token is not None:
-            
            return Response(serializers.UserProfilesSerializer(user).data)
-        else:
-            print("no token is provided in the header or the header is missing")
-        return Response(status=200,data={'status':'success'})
+     
+        
     
 
 class VerifyEmail(APIView):
@@ -60,3 +53,39 @@ class VerifyEmail(APIView):
     
 class OldiesTokenObtainPairView(TokenObtainPairView):
     serializer_class = serializers.OldiesTokenObtainPairSerializer   
+
+
+class GoogleOauthView(APIView):
+    def get(self,request):
+        serializer_class = serializers.GoogleOauthSerializer(data=request.GET)
+        serializer_class.is_valid(raise_exception=True)
+        
+        validated_data = serializer_class.validated_data
+        code = validated_data.get('code')
+        
+        access_token = GoogleOauth.google_get_access_token(code)
+        
+        user_data = GoogleOauth.get_google_user_data(access_token)
+        
+        
+        
+        profile_serializer = serializers.UserProfilesSerializer(data=user_data)
+        if models.UserProfiles.objects.filter(email=user_data['email']).exists():
+            user = models.UserProfiles.objects.get(email=user_data['email'])
+            jwt = RefreshToken.for_user(user)
+            
+            return Response(status=200,data={'access':str(jwt.access_token),'refresh':str(jwt)})
+        else:
+            profile_serializer.is_valid(raise_exception=True)
+            profile_serializer.save()
+            jwt = RefreshToken.for_user(profile_serializer.instance)
+            return Response(status=200,data={'access':str(jwt.access_token),'refresh':str(jwt)})
+        
+        
+        
+        
+        
+        
+       
+    
+    
