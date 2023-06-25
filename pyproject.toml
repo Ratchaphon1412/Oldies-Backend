@@ -10,10 +10,10 @@ packages = [{include = "oldies_backend"}]
 python = "^3.11"
 django-environ = "^0.10.0"
 django-filter = "^23.2"
-firebase-admin = "^6.1.0"
 django = "^4.2.2"
 djangorestframework-simplejwt = "^5.2.2"
 pillow = "^9.5.0"
+requests = "^2.31.0"
 
 
 [tool.poetry.group.dev.dependencies]

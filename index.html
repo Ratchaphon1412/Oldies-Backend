@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+
+        const googleAuthUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
+        const redirectUri = 'api/auth/google/';
+        const scope = [
+            'https://www.googleapis.com/auth/userinfo.email',
+            'https://www.googleapis.com/auth/userinfo.profile'
+        ].join(' ');
+
+        const params = {
+            response_type: 'code',
+            client_id: '1076325831534-8pe80ns9a1ifdhi391t2cdsmffsiskr4.apps.googleusercontent.com',
+            redirect_uri: `http://localhost:8000/${redirectUri}`,
+            prompt: 'select_account',
+            access_type: 'offline',
+            scope
+        };
+
+        const urlParams = new URLSearchParams(params).toString();
+        window.location = `${googleAuthUrl}?${urlParams}`;
+
+
+    </script>
+
+</head>
+
+<body>
+
+</body>
+
+</html>
