@@ -26,3 +26,19 @@ class EmailErrorSend(APIException):
         status_code = status.HTTP_406_NOT_ACCEPTABLE
         default_detail = "Email is not verified because can't send email"
         default_code = "email_not_verified"
+        
+class PasswordErrorCommon(APIException):
+        status_code = status.HTTP_406_NOT_ACCEPTABLE
+        default_detail = "Password is not common"
+        default_code = "password_not_common"
+
+class GoogleOauthAccessTokenError(APIException):
+        status_code = status.HTTP_401_UNAUTHORIZED
+        default_detail = "Google Oauth Error because can't get access token"
+        default_code = "google_oauth_error"
+
+class GoogleOauthGetUserDataError(APIException):
+        status_code = status.HTTP_401_UNAUTHORIZED
+        default_detail = "Google Oauth Error because can't get user data"
+        default_code = "google_oauth_error"
+

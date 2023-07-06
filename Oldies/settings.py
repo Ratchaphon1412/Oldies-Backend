@@ -48,7 +48,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt', #JWT
-    'Users'
+    'Users',
+    
+
+    
 ]
 
 MIDDLEWARE = [
@@ -112,6 +115,15 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 
+#Frontend URL
+BASE_FRONTEND_URL = env('BASE_FRONTEND_URL')
+#Backend URL
+BASE_BACKEND_URL = env('BASE_BACKEND_URL')
+
+#GOOGLE OAUTH
+GOOGLE_CLIENT_SECRETE = env('GOOGLE_CLIENT_SECRETE')
+GOOGLE_CLIENT_ID = env('GOOGLE_CLIENT_ID')
+
 #Email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -122,6 +134,9 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 DEFAULT_FROM_EMAIL = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD =env('EMAIL_HOST_PASSWORD')
 
+#FACEBOOK OAUTH
+FACEBOOK_ID = env('FACEBOOK_ID_APP')
+FACEBOOK_SECRETE = env('FACEBOOK_SECRETE')
 
 
 ROOT_URLCONF = 'Oldies.urls'
@@ -165,9 +180,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+      
     },
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
