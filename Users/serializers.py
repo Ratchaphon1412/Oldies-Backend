@@ -53,13 +53,25 @@ class OldiesTokenObtainPairSerializer(TokenObtainPairSerializer):
             raise EmailNotVerified
         
         return token
+    
+class FacebookOauthSerializer(serializers.Serializer):
+    code = serializers.CharField(max_length=500,required=False)
+    error = serializers.CharField(max_length=255,required=False)
+    state = serializers.CharField(max_length=255,required=False)
 
+    def validate(self, data):
+        if data.get('error') is not None:
+            login_url = f'{settings.BASE_FRONTEND_URL}login'
+            params = urlencode({'error':data.get('error')})
+            return redirect(f'{login_url}?{params}')
+        return data
 
 class GoogleOauthSerializer(serializers.Serializer):
     code = serializers.CharField(max_length=255,required=False)
     error = serializers.CharField(max_length=255,required=False)
 
     def validate(self,data):
+      
         if data.get('error') is not None:
             login_url = f'{settings.BASE_FRONTEND_URL}login'
             params = urlencode({'error': data.get('error')})
