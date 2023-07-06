@@ -61,5 +61,27 @@ class GoogleOauth:
         }
         
         return profile
+    
+class FacebookOauth:
+    def facebook_get_accesstoken(code):
+        secrete_key = settings.FACEBOOK_SECRETE
+        client_id = settings.FACEBOOK_ID
+        response = requests.get(f"https://graph.facebook.com/v17.0/oauth/access_token?client_id={client_id}&redirect_uri=http://localhost:8000/api/auth/facebook/callback/&client_secret={secrete_key}&code={code}")
+        access_token = response.json()['access_token']
+        
+        response_profile = requests.get(f"https://graph.facebook.com/me?access_token={access_token}&fields=id,name,email,picture.width(500).height(500)")
+        response_profile = response_profile.json()
+        profile={
+            'email':response_profile['email'],
+            'username':response_profile['name'],
+            'is_email_verified':True,
+            'profile':response_profile['picture']['data']['url'],
+            'service':'Facebook'
+        }
+        
+        return profile
+  
+        
+        
         
         
