@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt', #JWT
+    "corsheaders" ,# CORS
     'Users',
     'Products'
     
@@ -58,6 +59,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",# CORS
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -139,6 +141,8 @@ EMAIL_HOST_PASSWORD =env('EMAIL_HOST_PASSWORD')
 FACEBOOK_ID = env('FACEBOOK_ID_APP')
 FACEBOOK_SECRETE = env('FACEBOOK_SECRETE')
 
+# CORS for all origins with all headers and methods allowed
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'Oldies.urls'
 
