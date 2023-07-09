@@ -32,8 +32,6 @@ jobs:
         echo "DB_USER=${{secrets.DB_USER}}" > .env
         echo "DB_PASSWORD=${{secrets.DB_PASSWORD}}" > .env
         cat .env
-    - name: Set up Docker Compose
-      uses: docker/compose-cli-action@v0.6.1
     - name: Build docker-compose
       run : | 
         docker-compose up -d 
