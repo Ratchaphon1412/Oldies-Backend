@@ -30,7 +30,7 @@ jobs:
         cat .env
     - name: Build docker-compose
       run : | 
-        docker-compose up 
+        docker-compose up -d
     - name : login heroku
       uses: akhileshns/heroku-deploy@v3.12.14 # This is the action
       with:
