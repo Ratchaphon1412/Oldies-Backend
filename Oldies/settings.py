@@ -170,8 +170,12 @@ WSGI_APPLICATION = 'Oldies.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST':'database',
+        'PORT':3306,
+        'NAME':'Oldies',
+        "USER":env('DB_USER'),
+        "PASSWORD":env('DB_PASSWORD'),
     }
 }
 
