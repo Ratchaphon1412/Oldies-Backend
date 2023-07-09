@@ -9,10 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.7, 3.8, 3.9]
 
     steps:
     - name: Checkout repository
@@ -34,15 +30,13 @@ jobs:
         cat .env
     - name: Build docker-compose
       run : | 
-        docker-compose up -d 
-        docker-compose push
+        docker-compose up 
     - name : login heroku
       uses: akhileshns/heroku-deploy@v3.12.14 # This is the action
       with:
         heroku_api_key: ${{secrets.HEROKU_API_KEY}}
         heroku_app_name: "oldies-backend" #Must be unique in Heroku
         heroku_email: "ratchaphon.h111@gmail.com"
-        branch: develop
     - name : deploy to heroku
       run : heroku container:push web
       
