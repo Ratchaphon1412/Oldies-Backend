@@ -37,6 +37,9 @@ jobs:
         heroku_api_key: ${{secrets.HEROKU_API_KEY}}
         heroku_app_name: "oldies-backend" #Must be unique in Heroku
         heroku_email: "ratchaphon.h111@gmail.com"
+      run: |
+       heroku login
+       heroku container:login
     - name : deploy to heroku
-      run : heroku container:push web
+      run : heroku container:push web --app oldies-backend
       
