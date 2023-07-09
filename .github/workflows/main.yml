@@ -32,14 +32,17 @@ jobs:
         echo "DB_USER=${{secrets.DB_USER}}" > .env
         echo "DB_PASSWORD=${{secrets.DB_PASSWORD}}" > .env
         cat .env
+    - name: Set up Docker Compose
+      uses: docker/compose-cli-action@v0.6.1
     - name: Build docker-compose
-      run : docker-compose up -d 
+      run : | 
+        docker-compose up -d 
+        docker-compose push
     - name : login heroku
       uses: akhileshns/heroku-deploy@v3.12.14 # This is the action
       with:
         heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-        heroku_app_name: "oldies-backend" #Must be unique in Heroku
-        heroku_email: "ratchaphon.h111@gmail.com"
+
     - name : deploy to heroku
-      run : heroku container:release web 
+      run : heroku container:release web -a oldies-backend
       
