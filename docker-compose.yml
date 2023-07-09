@@ -24,7 +24,7 @@ services:
     env_file: .env
     build: 
       context: .
-      dockerfile: Dockerfile
+      dockerfile: dockerfile
     tty: true
     volumes:
       - .:/code
