@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-import environ #module for access env
+# import environ #module for access env
 import os
 from pathlib import Path
 from datetime import timedelta
@@ -21,15 +21,15 @@ from datetime import timedelta
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 #Read file env
-env = environ.Env()
+# env = environ.Env()
 # Take environment variables from .env file
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+# environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt', #JWT
     "corsheaders" ,# CORS
     'Users',
-    'Products'
+    'Products',
+    'Core' # Core app
     
 
     
@@ -86,7 +87,7 @@ SIMPLE_JWT = {
     "UPDATE_LAST_LOGIN":True,
 
     "ALGORITHM": "HS256",
-    "SIGNING_KEY": env('SECRET_KEY'),
+    "SIGNING_KEY":os.environ.get('SECRET_KEY'),
     "VERIFYING_KEY": "",
     "AUDIENCE": None,
     "ISSUER": None,
@@ -119,13 +120,13 @@ SIMPLE_JWT = {
 }
 
 #Frontend URL
-BASE_FRONTEND_URL = env('BASE_FRONTEND_URL')
+BASE_FRONTEND_URL = os.environ.get('BASE_FRONTEND_URL')
 #Backend URL
-BASE_BACKEND_URL = env('BASE_BACKEND_URL')
+BASE_BACKEND_URL = os.environ.get('BASE_BACKEND_URL')
 
 #GOOGLE OAUTH
-GOOGLE_CLIENT_SECRETE = env('GOOGLE_CLIENT_SECRETE')
-GOOGLE_CLIENT_ID = env('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_SECRETE =  os.environ.get('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_SECRETE')
 
 #Email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -133,13 +134,13 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_USE_SSL = False
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-DEFAULT_FROM_EMAIL = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD =env('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 #FACEBOOK OAUTH
-FACEBOOK_ID = env('FACEBOOK_ID_APP')
-FACEBOOK_SECRETE = env('FACEBOOK_SECRETE')
+FACEBOOK_ID = os.environ.get('FACEBOOK_ID_APP')
+FACEBOOK_SECRETE = os.environ.get('FACEBOOK_SECRETE')
 
 # CORS for all origins with all headers and methods allowed
 CORS_ALLOW_ALL_ORIGINS = True
@@ -174,8 +175,8 @@ DATABASES = {
         'HOST':'database',
         'PORT':3306,
         'NAME':'Oldies',
-        "USER":env('DB_USER'),
-        "PASSWORD":env('DB_PASSWORD'),
+        "USER":os.environ.get('DB_USER'),
+        "PASSWORD":os.environ.get('DB_PASSWORD'),
     }
 }
 
