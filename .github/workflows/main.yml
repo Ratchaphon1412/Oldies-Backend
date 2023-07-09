@@ -1,0 +1,43 @@
+#Works flows
+name: Django CI
+
+#run worksflows when push to develop
+on:
+  push:
+    branches: [ "develop" ]
+# task
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Create env file
+      run: |
+        touch .env
+        echo "SECRET_KEY=${{secrets.SECRETE_KEY}}" > .env
+        echo "EMAIL_HOST_USER=${{secrets.EMAIL_HOST_USER}}" > .env
+        echo "EMAIL_HOST_PASSWORD=${{secrets.EMAIL_HOST_PASSWORD}}" > .env
+        echo "GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}}" > .env
+        echo "GOOGLE_CLIENT_SECRETE=${{secrets.GOOGLE_CLIENT_SECRETE}}" > .env
+        echo "BASE_FRONTEND_URL=${{secrets.BASE_FRONTEND_URL}}" > .env
+        echo "BASE_BACKEND_URL=${{secrets.BASE_BACKEND_URL}}" > .env
+        echo "FACEBOOK_ID_APP=${{secrets.FACEBOOK_ID_APP}}" > .env
+        echo "FACEBOOK_SECRETE=${{secrets.FACEBOOK_SECRETE}}" > .env
+        echo "DB_USER=${{secrets.DB_USER}}" > .env
+        echo "DB_PASSWORD=${{secrets.DB_PASSWORD}}" > .env
+        cat .env
+    - name: Build docker-compose
+      run : docker-compose up -d 
+    - name : deploy to heroku
+      uses: akhileshns/heroku-deploy@v3.12.14 # This is the action
+      with:
+        heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+        heroku_app_name: "oldies-backend" #Must be unique in Heroku
+        heroku_email: "ratchaphon.h111@gmail.com"
+      
