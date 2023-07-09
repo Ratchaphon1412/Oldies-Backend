@@ -16,6 +16,12 @@ services:
       - backend_service
   backend:
     container_name: backend-oldies
+    command: >
+      sh -c "poetry run python3 manage.py wait_db &&
+            poetry run python3 manage.py makemigrations &&
+             poetry run python3 manage.py migrate &&
+             poetry run gunicorn --bind 0.0.0.0:8000 Oldies.wsgi:application"
+    env_file: .env
     build: 
       context: .
       dockerfile: Dockerfile
