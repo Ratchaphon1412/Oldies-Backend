@@ -14,11 +14,15 @@ services:
       - ./database_temp:/var/run/mysqld
     networks:
       - backend_service
+    healthcheck:
+        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+        timeout: 20s
+        retries: 10
   backend:
     container_name: backend-oldies
     command: >
       sh -c "poetry run python3 manage.py wait_db &&
-            poetry run python3 manage.py makemigrations &&
+              poetry run python3 manage.py makemigrations &&
              poetry run python3 manage.py migrate &&
              poetry run gunicorn --bind 0.0.0.0:8000 Oldies.wsgi:application"
     env_file: .env
@@ -31,7 +35,9 @@ services:
     expose:
       - "8000"
     depends_on:
-      - database
+      database:
+        condition: service_started
+      
     networks:
       - backend_service
     
@@ -60,6 +66,7 @@ services:
       - "80"
     networks:
       - backend_service
+
 
 networks:
   backend_service:

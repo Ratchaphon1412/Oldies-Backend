@@ -28,28 +28,15 @@ jobs:
         echo "DB_USER=${{secrets.DB_USER}}" > .env
         echo "DB_PASSWORD=${{secrets.DB_PASSWORD}}" > .env
         cat .env
-    - name: Heroku login credentials
-      run: |
-        cat > ~/.netrc <<EOF
-          machine api.heroku.com
-            login $HEROKU_EMAIL
-            password $HEROKU_API_KEY
-          machine git.heroku.com
-            login $HEROKU_EMAIL
-            password $HEROKU_API_KEY
-        EOF
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
-    - name: Log in to Heroku
-      run: |
-        echo ${{ secrets.HEROKU_API_KEY }} | docker login --username=_ --password-stdin registry.heroku.com
-        heroku container:login
     - name: Build and push Docker images
       run: |
         docker-compose build
         docker-compose push
 
-    - name: Deploy to Heroku
-      run: heroku container:release web --app oldies-backend
-      
+    - name: deploy to AWS2
+      uses: easingthemes/ssh-deploy@main
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_EC2 }}
+        REMOTE_HOST: $ {{ secrets.HOST_DNS_EC2 }}
+        REMOTE_USER: $ {{ secrets.REMOTE_USER_EC2 }}
+        TARGET: ${{ secretes.TARGET_DIR }}
