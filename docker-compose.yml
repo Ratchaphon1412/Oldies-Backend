@@ -14,10 +14,6 @@ services:
       - ./database_temp:/var/run/mysqld
     networks:
       - backend_service
-    healthcheck:
-        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-        timeout: 20s
-        retries: 10
   backend:
     container_name: backend-oldies
     command: >
